@@ -49,8 +49,8 @@ class AdapterFavorite(private val onItemClickCallback: OnItemClickCallback) :
         private val binding = ItemNewsBinding.bind(itemView)
         fun bind(news: Items) {
             Picasso.get().load(news.urlToImg).into(binding.imgNews)
-            binding.tvNewsId.text = news.title
-            binding.tvNewsName.text = news.author
+            binding.tvNewsId.text = news.name
+            binding.tvNewsName.text = news.date
             binding.cardView.setOnClickListener {
                 onItemClickCallback.onItemClicked(news, adapterPosition)
             }
