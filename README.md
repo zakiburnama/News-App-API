@@ -7,7 +7,7 @@ Built with **Kotlin** and **Android Studio**, the app uses **SQLite** for offlin
 
 ## 📸 Screenshots  
 
-| Home Screen | Loading State (Shimmer Effect) | Article Detail |
+| Home & Search Screen | Loading State (Shimmer Effect) | Article Detail |
 |------------|--------------------|--------------|
 | ![Home](screenshots/home.png) | ![Shimmer](screenshots/shimmer.png) | ![Detail](screenshots/detail.png) |
 
@@ -18,6 +18,7 @@ Built with **Kotlin** and **Android Studio**, the app uses **SQLite** for offlin
 ## 🚀 Features  
 
 ✅ Fetch latest news from **NewsAPI.org**  
+✅ Search news from **NewsAPI.org**  
 ✅ Favorite list can be access offline mode using **SQLite**  
 ✅ **LoopJ** library for efficient API calls  
 ✅ Smooth **Shimmer** loading effect  
