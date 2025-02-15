@@ -11,7 +11,6 @@ Built with **Kotlin** and **Android Studio**, the app uses **SQLite** for offlin
 |------------|--------------------|--------------|
 | ![Home](screenshots/home.png) | ![Shimmer](screenshots/shimmer.png) | ![Detail](screenshots/detail.png) |
 
-> 📌 *Place your actual screenshots in the `screenshots/` folder and update the image paths accordingly.*  
 
 ---
 
