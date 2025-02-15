@@ -28,6 +28,7 @@ class FavoriteActivity : AppCompatActivity() {
     val resultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        Log.i(TAG, "#### FavoriteActivity resultLauncher : $result")
         if (result.data != null) {
             when (result.resultCode) {
                 DetailActivity.RESULT_ADD -> {
@@ -62,60 +63,61 @@ class FavoriteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i(TAG, "#### FavoriteActivity onCreate $savedInstanceState")
         enableEdgeToEdge()
-//        setContentView(R.layout.activity_favorite)
 
         binding = ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.title = "Favorite News"
+
+        setupWindowInsets()
+
+        showRecyler()
+
+        loadData(savedInstanceState)
+//        loadNewsAsync()
+    }
+
+    private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main3)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
 
-//        showRecyler()
-        binding.listFavorite.layoutManager = LinearLayoutManager(this)
-        binding.listFavorite.setHasFixedSize(true)
-
-        adapter = AdapterFavorite(object : AdapterFavorite.OnItemClickCallback {
-            override fun onItemClicked(selectedNote: Items?, position: Int?) {
-                Toast.makeText(this@FavoriteActivity, selectedNote?.title, Toast.LENGTH_SHORT).show()
-                val intent = Intent(this@FavoriteActivity, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_DATA, selectedNote)
-                intent.putExtra(DetailActivity.EXTRA_POSITION, position)
-                resultLauncher.launch(intent)
-            }
-        })
-        binding.listFavorite.adapter = adapter
-
+    private fun loadData(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            loadNotesAsync()
+            Log.i(TAG, "#### FavoriteActivity if savedInstanceState : $savedInstanceState")
+            loadNewsAsync()
         } else {
             val list = savedInstanceState.getParcelableArrayList<Items>(EXTRA_STATE)
             if (list != null) {
                 adapter.listNews = list
+                Log.i(TAG, "#### FavoriteActivity if list : $list")
+            } else {
+                Log.i(TAG, "#### FavoriteActivity else list : $list")
             }
         }
-
-//        loadNotesAsync()
     }
 
-    private fun loadNotesAsync() {
+    private fun loadNewsAsync() {
+        Log.i(TAG, "#### FavoriteActivity loadNotesAsync")
         lifecycleScope.launch {
 //            binding.progressbar.visibility = View.VISIBLE
             val newsHelper = NewsHelper.getInstance(applicationContext)
             newsHelper.open()
-            val deferredNotes = async(Dispatchers.IO) {
+            val deferredNews = async(Dispatchers.IO) {
                 val cursor = newsHelper.queryAll()
                 MappingHelper.mapCursorToArrayList(cursor)
             }
 //            binding.progressbar.visibility = View.INVISIBLE
-            val news = deferredNotes.await()
+            val news = deferredNews.await()
             if (news.size > 0) {
                 adapter.listNews = news
-                Log.i("TAG", "#### FavoriteActivity size : ${news.size}")
-                Log.i("TAG", "#### FavoriteActivity  : ${news}")
+                Log.i(TAG, "#### FavoriteActivity size : ${news.size}")
+                Log.i(TAG, "#### FavoriteActivity  : ${news}")
             } else {
                 adapter.listNews = ArrayList()
                 showSnackbarMessage("Tidak ada data saat ini")
@@ -124,14 +126,28 @@ class FavoriteActivity : AppCompatActivity() {
         }
     }
 
-    private fun showRecyler(){
-
-
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelableArrayList(EXTRA_STATE, adapter.listNews)
+        Log.i(TAG, "#### FavoriteActivity override onSaveInstanceState : ${adapter.listNews}")
+    }
+
+    private fun showRecyler() {
+        binding.listFavorite.layoutManager = LinearLayoutManager(this)
+        binding.listFavorite.setHasFixedSize(true)
+
+        adapter = AdapterFavorite(object : AdapterFavorite.OnItemClickCallback {
+            override fun onItemClicked(selectedNote: Items?, position: Int?) {
+                Toast.makeText(this@FavoriteActivity, selectedNote?.title, Toast.LENGTH_SHORT)
+                    .show()
+                val intent = Intent(this@FavoriteActivity, DetailActivity::class.java)
+                intent.putExtra(DetailActivity.EXTRA_DATA, selectedNote)
+                intent.putExtra(DetailActivity.EXTRA_POSITION, position)
+                resultLauncher.launch(intent)
+            }
+        })
+
+        binding.listFavorite.adapter = adapter
     }
 
     private fun showSnackbarMessage(message: String) {
@@ -140,5 +156,6 @@ class FavoriteActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_STATE = "EXTRA_STATE"
+        private const val TAG = "FavoriteActivity"
     }
 }
