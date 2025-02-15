@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,9 +16,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
+import kotlinx.coroutines.delay
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -25,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private val listNews = ArrayList<Items>()
     private lateinit var recyclerView: RecyclerView
+    private lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +40,14 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        supportActionBar?.title = "Breaking News"
+
         recyclerView = findViewById(R.id.listNews)
 
-        getListNews()
+        shimmerFrameLayout = findViewById(R.id.shimmer_view_container)
+
+
+//        getListNews()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -76,10 +85,25 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun getListNewsApi(keyword : String = "Tesla") {
+    private fun startShimmerEffect() {
+        shimmerFrameLayout.startShimmer()
+    }
+
+    private fun stopShimmerEffect() {
+        shimmerFrameLayout.stopShimmer()
+        shimmerFrameLayout.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
+    }
+
+    // Actual News API
+    private fun getListNewsApi(keyword : String = "Super bowl") {
+
+        stopShimmerEffect()
         val client = AsyncHttpClient()
 //        val url = "https://newsapi.org/v2/everything?q=tesla&from=2025-01-13&sortBy=publishedAt&apiKey=fb8800c5137b4c8aa839a1287686065f"
-        val url = "https://newsapi.org/v2/everything?q={$keyword}&from=2025-01-13&sortBy=publishedAt&apiKey=fb8800c5137b4c8aa839a1287686065f"
+//        val url = "https://newsapi.org/v2/everything?q={$keyword}&from=2025-01-13&sortBy=publishedAt&apiKey=fb8800c5137b4c8aa839a1287686065f"
+        val url = "https://newsapi.org/v2/everything?q=kendrick&from=2025-01-15&sortBy=publishedAt&apiKey=58be7a445f224078aa57ffb2ee12326e"
+//        val url = "https://newsapi.org/v2/everything?q={$keyword}&from=2025-01-15&sortBy=publishedAt&apiKey=58be7a445f224078aa57ffb2ee12326e\n"
         client.get(url, object : AsyncHttpResponseHandler(){
             override fun onSuccess(
                 statusCode: Int,
@@ -149,8 +173,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
+    // Temporary API list of phone
     private fun getListNews() {
+        startShimmerEffect()
         val client = AsyncHttpClient()
         val keyword = "awda"
         val urlnews = "https://newsapi.org/v2/everything?apiKey=fb8800c5137b4c8aa839a1287686065f"
@@ -173,19 +198,8 @@ class MainActivity : AppCompatActivity() {
 
                     for (i in 0 until jsonArray.length()) {
                         val jsonObject = jsonArray.getJSONObject(i)
-
-//                        a.	Name
-//                        b.	Author
-//                        c.	Title
-//                        d.	Description
-//                        e.	Url ( Untukmembukahalaman baru )
-//                        f.	UrlToImage ( Untukmenampilkangambar)
-//                        g.	PublishedAt
-
                         val name = jsonObject.getString("name")
                         val id = jsonObject.getString("id")
-
-//                        listNews.add(Items(name, id, img)) // name, authorm title
                         listNews.add(Items(
                             name, // name
                             "Author", //Author
@@ -199,6 +213,8 @@ class MainActivity : AppCompatActivity() {
                         Log.i("TAG", "#### onSuccess try 1 : $name")
                         Log.i("TAG", "#### onSuccess try 1 : $id")
                     }
+                    Thread.sleep(5000)
+                    stopShimmerEffect()
                     showRecycler()
                 }catch (e: Exception) {
                     Log.i("TAG", "#### catch : ${e.message}")
@@ -229,14 +245,9 @@ class MainActivity : AppCompatActivity() {
                 return if (position % 5 == 0) 2 else 1
             }
         }
-        //
-//        recyclerView.layoutManager = layoutManager
-//        binding.listNews.layoutManager = layoutManager
-        recyclerView.layoutManager = layoutManager
-
 
         val adapter = AdapterNews(listNews)
-//        binding.listNews.adapter = adapter
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
         adapter.setOnItemClickCallback(object : AdapterNews.OnItemClickCallback{
@@ -253,68 +264,69 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun getListNews2() {
-        val client = AsyncHttpClient()
-
-//        fb8800c5137b4c8aa839a1287686065f
-//        58be7a445f224078aa57ffb2ee12326e
-
-//        val url = "https://newsapi.org/v2/everything?q=tesla&from=2025-01-12&sortBy=publishedAt&apiKey=API_KEY"
-//        val url = "https://newsapi.org/v2/everything?q=tesla&from=2025-01-12&sortBy=publishedAt&apiKey=fb8800c5137b4c8aa839a1287686065f"
-        val url = "https://newsapi.org/v2/everything?q=tesla&from=2025-01-12&sortBy=publishedAt&apiKey=58be7a445f224078aa57ffb2ee12326e"
-
-        client.get(url, object : AsyncHttpResponseHandler() {
-            override fun onSuccess(statusCode: Int, headers: Array<Header>,responseBody: ByteArray) {
-                val result = String(responseBody)
-
-                Log.i("TAG", "#### onSuccess : ${result}")
-
-                try {
-
-                    val jsonObjectNews = JSONObject(result)
-                    val status = jsonObjectNews.getString("status")
-                    val totalResults = jsonObjectNews.getInt("totalResults")
-                    val jsonArrayNews = jsonObjectNews.getJSONArray("articles")
-
-//                    Log.i("TAG", "#### onSuccess try jsonObjectNews : ${jsonObjectNews}")
-//                    Log.i("TAG", "#### onSuccess try status : ${status}")
-//                    Log.i("TAG", "#### onSuccess try totalResults : ${totalResults}")
-//                    Log.i("TAG", "#### onSuccess try jsonArrayNews : ${jsonArrayNews}")
-
-//                    val jsonArray = JSONArray(result) //
-
-//                    for (i in 0 until jsonArrayNews.length()) {
-//                        val jsonObject = jsonArrayNews.getJSONObject(i)
+    // Delete soon
+//    private fun getListNews2() {
+//        val client = AsyncHttpClient()
 //
-//                        val author = jsonObject.getString("author")
-//                        val title = jsonObject.getString("title")
-//                        val urlToImage = jsonObject.getString("urlToImage")
+////        fb8800c5137b4c8aa839a1287686065f
+////        58be7a445f224078aa57ffb2ee12326e
 //
-//                        val source = jsonObject.getJSONObject("source")
-//                        val name = source.getString("name")
+////        val url = "https://newsapi.org/v2/everything?q=tesla&from=2025-01-12&sortBy=publishedAt&apiKey=API_KEY"
+////        val url = "https://newsapi.org/v2/everything?q=tesla&from=2025-01-12&sortBy=publishedAt&apiKey=fb8800c5137b4c8aa839a1287686065f"
+//        val url = "https://newsapi.org/v2/everything?q=tesla&from=2025-01-12&sortBy=publishedAt&apiKey=58be7a445f224078aa57ffb2ee12326e"
 //
-////                        listCat.add(Cat(author, name, urlToImage))
+//        client.get(url, object : AsyncHttpResponseHandler() {
+//            override fun onSuccess(statusCode: Int, headers: Array<Header>,responseBody: ByteArray) {
+//                val result = String(responseBody)
 //
-//                        Log.i("TAG", "#### onSuccess try 1 : $author")
-//                        Log.i("TAG", "#### onSuccess try 1 : $name")
-//                    }
-
-//                    Log.i("TAG", "#### onSuccess try 2 : $jsonArray")
-
-
-//                    showRecycler()
-                } catch (e: Exception) {
-                    Log.i("TAG", "#### catch : ${e.message}")
-//                    Toast.makeText(this@MainActivity,e.message, Toast.LENGTH_SHORT).show()
-                }
-            }
-            override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
-                Log.i("TAG", "#### onFailure statusCode : $statusCode")
-                Log.i("TAG", "#### onFailure headers : $headers")
-                Log.i("TAG", "#### onFailure responseBody : $responseBody")
-                Log.i("TAG", "#### onFailure error : $error")
-//                Toast.makeText(this@MainActivity, statusCode, Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
+//                Log.i("TAG", "#### onSuccess : ${result}")
+//
+//                try {
+//
+//                    val jsonObjectNews = JSONObject(result)
+//                    val status = jsonObjectNews.getString("status")
+//                    val totalResults = jsonObjectNews.getInt("totalResults")
+//                    val jsonArrayNews = jsonObjectNews.getJSONArray("articles")
+//
+////                    Log.i("TAG", "#### onSuccess try jsonObjectNews : ${jsonObjectNews}")
+////                    Log.i("TAG", "#### onSuccess try status : ${status}")
+////                    Log.i("TAG", "#### onSuccess try totalResults : ${totalResults}")
+////                    Log.i("TAG", "#### onSuccess try jsonArrayNews : ${jsonArrayNews}")
+//
+////                    val jsonArray = JSONArray(result) //
+//
+////                    for (i in 0 until jsonArrayNews.length()) {
+////                        val jsonObject = jsonArrayNews.getJSONObject(i)
+////
+////                        val author = jsonObject.getString("author")
+////                        val title = jsonObject.getString("title")
+////                        val urlToImage = jsonObject.getString("urlToImage")
+////
+////                        val source = jsonObject.getJSONObject("source")
+////                        val name = source.getString("name")
+////
+//////                        listCat.add(Cat(author, name, urlToImage))
+////
+////                        Log.i("TAG", "#### onSuccess try 1 : $author")
+////                        Log.i("TAG", "#### onSuccess try 1 : $name")
+////                    }
+//
+////                    Log.i("TAG", "#### onSuccess try 2 : $jsonArray")
+//
+//
+////                    showRecycler()
+//                } catch (e: Exception) {
+//                    Log.i("TAG", "#### catch : ${e.message}")
+////                    Toast.makeText(this@MainActivity,e.message, Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//            override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
+//                Log.i("TAG", "#### onFailure statusCode : $statusCode")
+//                Log.i("TAG", "#### onFailure headers : $headers")
+//                Log.i("TAG", "#### onFailure responseBody : $responseBody")
+//                Log.i("TAG", "#### onFailure error : $error")
+////                Toast.makeText(this@MainActivity, statusCode, Toast.LENGTH_SHORT).show()
+//            }
+//        })
+//    }
 }
