@@ -29,8 +29,8 @@ class AdapterNews (private val listNews: ArrayList<Items>) :
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.tvNewsName.text = listNews[position].name
-        holder.tvNewsDesc.text = listNews[position].date
+        holder.tvNewsName.text = listNews[position].title
+        holder.tvNewsDesc.text = listNews[position].url
 
         val img = listNews[position].urlToImg
 
