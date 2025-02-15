@@ -9,7 +9,7 @@ internal class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
 
     companion object {
 
-        private const val DATABASE_NAME = "dbnoteapp6"
+        private const val DATABASE_NAME = "dbnoteapp7"
 
         private const val DATABASE_VERSION = 1
 
