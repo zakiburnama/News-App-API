@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.android.async.http)
     implementation("com.squareup.picasso:picasso:2.71828")
 
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+
 //    // Room dependencies
 //    implementation("androidx.room:room-runtime:2.6.1") // Use the latest version
 //    annotationProcessor("androidx.room:room-compiler:2.6.1") // Use the latest version
