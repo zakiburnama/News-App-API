@@ -18,7 +18,7 @@ Built with **Kotlin** and **Android Studio**, the app uses **SQLite** for offlin
 
 ✅ Fetch latest news from **NewsAPI.org**  
 ✅ Search news from **NewsAPI.org**  
-✅ Use MVVM
+✅ Use MVVM  
 ✅ Favorite list can be access offline mode using **SQLite**  
 ✅ **LoopJ** library for efficient API calls  
 ✅ Smooth **Shimmer** loading effect  
