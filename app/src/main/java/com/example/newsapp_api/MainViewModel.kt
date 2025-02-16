@@ -27,7 +27,6 @@ class MainViewModel : ViewModel() {
 
     private fun getListNewsApi(keyword : String) {
         val client = AsyncHttpClient()
-//        val url2 = "https://newsapi.org/v2/everything?q=$keyword&from=2025-01-16&sortBy=publishedAt&apiKey=fb8800c5137b4c8aa839a1287686065f"
         val url2 = "https://newsapi.org/v2/everything?q=$keyword&sortBy=publishedAt&apiKey=fb8800c5137b4c8aa839a1287686065f"
         val url = url2.filterNot { it.isWhitespace() }
         Log.i(TAG, "#### url : $url")
