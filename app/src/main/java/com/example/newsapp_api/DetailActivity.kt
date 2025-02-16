@@ -125,8 +125,8 @@ class DetailActivity : AppCompatActivity() {
 
         if (result > 0) {
             Toast.makeText(this, "Berhasil menambah data", Toast.LENGTH_SHORT).show()
-//            data?._id = result.toInt()
-//            setResult(RESULT_ADD, intent)
+            data?._id = result.toInt()
+            setResult(RESULT_ADD, intent)
 //            finish()
         } else {
             Toast.makeText(this, "Gagal menambah data", Toast.LENGTH_SHORT).show()
