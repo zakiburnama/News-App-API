@@ -16,6 +16,7 @@ class AdapterFavorite(private val onItemClickCallback: OnItemClickCallback) :
                 this.listNews.clear()
             }
             this.listNews.addAll(listNotes)
+            notifyDataSetChanged()
         }
 
     fun addItem(note: Items) {
