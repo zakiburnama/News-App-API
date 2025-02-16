@@ -56,6 +56,7 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.71828")
 
     implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation(libs.androidx.lifecycle.viewmodel.android)
 
 //    // Room dependencies
 //    implementation("androidx.room:room-runtime:2.6.1") // Use the latest version
