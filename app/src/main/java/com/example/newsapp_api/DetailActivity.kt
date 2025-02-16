@@ -133,7 +133,7 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    fun formatDateTime(dateTimeString: String): String {
+    private fun formatDateTime(dateTimeString: String): String {
         // 1. Parse the input string into an Instant
         val instant = Instant.parse(dateTimeString)
 
