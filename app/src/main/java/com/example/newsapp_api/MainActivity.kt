@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        viewModel= ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
+        viewModel= ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MainViewModel::class.java]
         viewModel.getNews()
 
         supportActionBar?.title = "Breaking News"
