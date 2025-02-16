@@ -37,26 +37,17 @@ class FavoriteActivity : AppCompatActivity() {
                     val homework =
                         result.data?.getParcelableExtra<Items>(DetailActivity.
                         EXTRA_HOMEWORK) as Items
-                    adapter.addItem(homework)
+//                    adapter.addItem(homework)
+                    viewModel.addItem(homework)
                     binding.listFavorite.smoothScrollToPosition(adapter.itemCount - 1)
                     showSnackbarMessage("Data berhasil ditambahkan")
                 }
-//                AddNewHomeworkActivity.RESULT_UPDATE -> {
-//                    val homework =
-//                        result.data?.getParcelableExtra<Homework>(AddNewHomeworkActivity.
-//                        EXTRA_HOMEWORK) as Homework
-//                    val position =
-//                        result?.data?.getIntExtra(AddNewHomeworkActivity.EXTRA_POSITION, 0)
-//                                as Int
-//                    adapter.updateItem(position, homework)
-//                    binding.rvHomework.smoothScrollToPosition(position)
-//                    showSnackbarMessage("Data berhasil diubah")
-//                }
                 DetailActivity.RESULT_DELETE -> {
                     val position =
                         result.data?.getIntExtra(DetailActivity.EXTRA_POSITION, 0)
                                 as Int
-                    adapter.removeItem(position)
+//                    adapter.removeItem(position)
+                    viewModel.removeItem(position)
                     showSnackbarMessage("Data berhasil dihapus")
                 }
             }
@@ -79,8 +70,22 @@ class FavoriteActivity : AppCompatActivity() {
 
         showRecyler()
 
-        loadData(savedInstanceState)
-//        loadNewsAsync()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.favoriteNews.observe(this) { news ->
+            adapter.listNews = news as ArrayList<Items>
+            if (news.isEmpty()) {
+                showSnackbarMessage("Tidak ada data saat ini")
+            }
+            Log.i(TAG, "#### FavoriteActivity observeViewModel : $news")
+        }
+        viewModel.isLoading.observe(this) { isLoading ->
+            // Update UI based on loading state
+            // For example, show/hide a progress bar or shimmer effect
+            Log.i(TAG, "#### FavoriteActivity isLoading : $isLoading")
+        }
     }
 
     private fun setupWindowInsets() {
@@ -89,51 +94,6 @@ class FavoriteActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-    }
-
-    private fun loadData(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            Log.i(TAG, "#### FavoriteActivity if savedInstanceState : $savedInstanceState")
-            loadNewsAsync()
-        } else {
-            val list = savedInstanceState.getParcelableArrayList<Items>(EXTRA_STATE)
-            if (list != null) {
-                adapter.listNews = list
-                Log.i(TAG, "#### FavoriteActivity if list : $list")
-            } else {
-                Log.i(TAG, "#### FavoriteActivity else list : $list")
-            }
-        }
-    }
-
-    private fun loadNewsAsync() {
-        Log.i(TAG, "#### FavoriteActivity loadNotesAsync")
-        lifecycleScope.launch {
-//            binding.progressbar.visibility = View.VISIBLE
-            val newsHelper = NewsHelper.getInstance(applicationContext)
-            newsHelper.open()
-            val deferredNews = async(Dispatchers.IO) {
-                val cursor = newsHelper.queryAll()
-                MappingHelper.mapCursorToArrayList(cursor)
-            }
-//            binding.progressbar.visibility = View.INVISIBLE
-            val news = deferredNews.await()
-            if (news.size > 0) {
-                adapter.listNews = news
-                Log.i(TAG, "#### FavoriteActivity size : ${news.size}")
-                Log.i(TAG, "#### FavoriteActivity  : ${news}")
-            } else {
-                adapter.listNews = ArrayList()
-                showSnackbarMessage("Tidak ada data saat ini")
-            }
-            newsHelper.close()
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(EXTRA_STATE, adapter.listNews)
-        Log.i(TAG, "#### FavoriteActivity override onSaveInstanceState : ${adapter.listNews}")
     }
 
     private fun showRecyler() {
@@ -159,7 +119,6 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val EXTRA_STATE = "EXTRA_STATE"
         private const val TAG = "FavoriteActivity"
     }
 }
