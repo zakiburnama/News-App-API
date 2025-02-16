@@ -8,7 +8,7 @@ Built with **Kotlin** and **Android Studio**, the app uses **SQLite** for offlin
 ## 📸 Screenshots  
 
 | Home & Search Screen | Loading State (Shimmer Effect) | Article Detail | Favorite |
-|------------|--------------------|--------------|
+|------------|--------------------|--------------|--------------|
 | ![Home](screenshots/home.png) | ![Shimmer](screenshots/shimmer.png) | ![Detail](screenshots/detail.png) | ![Favorite](screenshots/favorite.png) |
 
 
