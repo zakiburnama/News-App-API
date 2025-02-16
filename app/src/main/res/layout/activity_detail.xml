@@ -11,8 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -45,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="16dp"
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textStyle="bold"
             tools:text="News Source Name" />
@@ -54,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
             android:textAppearance="?attr/textAppearanceHeadlineSmall"
             android:textStyle="bold"
             tools:text="News Article Title" />
@@ -63,6 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
             android:textAppearance="?attr/textAppearanceBodyMedium"
             tools:text="Author Name" />
 
@@ -71,6 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
             android:textAppearance="?attr/textAppearanceBodySmall"
             tools:text="Published At: 2023-10-27" />
 
@@ -79,6 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="16dp"
             android:textAppearance="?attr/textAppearanceBodyMedium"
             tools:text="News Article Description" />
 
