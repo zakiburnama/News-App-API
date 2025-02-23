@@ -11,15 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp_api.databinding.ActivityFavoriteBinding
-import com.example.newsapp_api.db.NewsHelper
-import com.example.newsapp_api.helper.MappingHelper
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 class FavoriteActivity : AppCompatActivity() {
 
@@ -39,7 +33,7 @@ class FavoriteActivity : AppCompatActivity() {
                         EXTRA_HOMEWORK) as Items
 //                    adapter.addItem(homework)
                     viewModel.addItem(homework)
-                    binding.listFavorite.smoothScrollToPosition(adapter.itemCount - 1)
+                    binding.recyclerFavorite.smoothScrollToPosition(adapter.itemCount - 1)
                     showSnackbarMessage("Data berhasil ditambahkan")
                 }
                 DetailActivity.RESULT_DELETE -> {
@@ -97,25 +91,25 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
     private fun showRecyler() {
-        binding.listFavorite.layoutManager = LinearLayoutManager(this)
-        binding.listFavorite.setHasFixedSize(true)
+        binding.recyclerFavorite.layoutManager = LinearLayoutManager(this)
+        binding.recyclerFavorite.setHasFixedSize(true)
 
         adapter = AdapterFavorite(object : AdapterFavorite.OnItemClickCallback {
-            override fun onItemClicked(selectedNote: Items?, position: Int?) {
-                Toast.makeText(this@FavoriteActivity, selectedNote?.title, Toast.LENGTH_SHORT)
+            override fun onItemClicked(selectedNews: Items?, position: Int?) {
+                Toast.makeText(this@FavoriteActivity, selectedNews?.title, Toast.LENGTH_SHORT)
                     .show()
                 val intent = Intent(this@FavoriteActivity, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_DATA, selectedNote)
+                intent.putExtra(DetailActivity.EXTRA_DATA, selectedNews)
                 intent.putExtra(DetailActivity.EXTRA_POSITION, position)
                 resultLauncher.launch(intent)
             }
         })
 
-        binding.listFavorite.adapter = adapter
+        binding.recyclerFavorite.adapter = adapter
     }
 
     private fun showSnackbarMessage(message: String) {
-        Snackbar.make(binding.listFavorite, message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.recyclerFavorite, message, Snackbar.LENGTH_SHORT).show()
     }
 
     companion object {
