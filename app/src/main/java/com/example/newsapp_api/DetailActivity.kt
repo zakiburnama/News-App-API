@@ -16,12 +16,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.newsapp_api.databinding.ActivityDetailBinding
 import com.example.newsapp_api.db.DatabaseContract
 import com.example.newsapp_api.db.NewsHelper
+import com.example.newsapp_api.helper.DateTimeUtils
 import com.squareup.picasso.Picasso
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 class DetailActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -32,12 +28,9 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         enableEdgeToEdge()
-//        setContentView(R.layout.activity_detail)
-
-        binding = ActivityDetailBinding.inflate(layoutInflater) // Inflate the binding
-        setContentView(binding.root) // Set the root view from the binding
+        binding = ActivityDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main2)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -59,7 +52,7 @@ class DetailActivity : AppCompatActivity() {
             binding.newsDetailFavoriteButton.setImageDrawable(drawable)
         }
 
-        val date = data?.date?.let { formatDateTime(it) }
+        val date = data?.date?.let { DateTimeUtils.formatDateTime(it) }
         Picasso.get().load(data?.urlToImg).into(binding.newsDetailImage)
         binding.newsDetailName.text = data?.name
         binding.newsDetailTitle.text = data?.title
@@ -82,14 +75,12 @@ class DetailActivity : AppCompatActivity() {
             binding.newsDetailFavoriteButton.setImageDrawable(drawable)
             data?.isFavorite = true
             addNewNews(data as Items)
-//            binding.newsDetailFavoriteButton.setImageResource(R.drawable.baseline_favorite_24)
         } else {
             val drawable: Drawable? = binding.newsDetailFavoriteButton.drawable?.constantState?.newDrawable()?.mutate()
             drawable?.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY)
             binding.newsDetailFavoriteButton.setImageDrawable(drawable)
             data?.isFavorite = false
             deleteNews()
-//            binding.newsDetailFavoriteButton.setImageResource(R.drawable.baseline_favorite_24_red)
         }
     }
 
@@ -131,20 +122,6 @@ class DetailActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Gagal menambah data", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun formatDateTime(dateTimeString: String): String {
-        // 1. Parse the input string into an Instant
-        val instant = Instant.parse(dateTimeString)
-
-        // 2. Convert the Instant to a LocalDateTime in the device's default timezone
-        val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-
-        // 3. Define the desired output format
-        val formatter = DateTimeFormatter.ofPattern("EEE, dd MMMM HH.mm", Locale("in", "ID"))
-
-        // 4. Format the LocalDateTime using the formatter
-        return localDateTime.format(formatter)
     }
 
     companion object {
