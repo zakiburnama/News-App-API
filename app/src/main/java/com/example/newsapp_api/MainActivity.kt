@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity() {
         searchView.queryHint = resources.getString(R.string.search_hint)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-//                Toast.makeText(this@MainActivity, query, Toast.LENGTH_SHORT).show()
                 viewModel.getNews(query)
                 viewModel.listNewsLive.observe(this@MainActivity) { news ->
                     stopShimmerEffect()
@@ -85,7 +84,6 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.favorite -> {
-//                Toast.makeText(this, "Favorite", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, FavoriteActivity::class.java)
                 startActivity(intent)
             }

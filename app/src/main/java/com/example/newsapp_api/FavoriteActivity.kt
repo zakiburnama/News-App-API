@@ -96,8 +96,6 @@ class FavoriteActivity : AppCompatActivity() {
 
         adapter = AdapterFavorite(object : AdapterFavorite.OnItemClickCallback {
             override fun onItemClicked(selectedNews: Items?, position: Int?) {
-                Toast.makeText(this@FavoriteActivity, selectedNews?.title, Toast.LENGTH_SHORT)
-                    .show()
                 val intent = Intent(this@FavoriteActivity, DetailActivity::class.java)
                 intent.putExtra(DetailActivity.EXTRA_DATA, selectedNews)
                 intent.putExtra(DetailActivity.EXTRA_POSITION, position)
