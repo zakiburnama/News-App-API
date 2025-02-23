@@ -6,9 +6,9 @@ import com.example.newsapp_api.db.DatabaseContract
 
 object MappingHelper {
 
-    fun mapCursorToArrayList(notesCursor: Cursor?): ArrayList<Items> {
+    fun mapCursorToArrayList(newsCursor: Cursor?): ArrayList<Items> {
         val newsList = ArrayList<Items>()
-        notesCursor?.apply {
+        newsCursor?.apply {
             while (moveToNext()) {
                 val id = getInt(getColumnIndexOrThrow(DatabaseContract.NewsColumns._ID))
                 val name = getString(getColumnIndexOrThrow(DatabaseContract.NewsColumns.NAME))

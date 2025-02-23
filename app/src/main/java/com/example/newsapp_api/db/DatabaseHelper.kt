@@ -9,11 +9,11 @@ internal class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
 
     companion object {
 
-        private const val DATABASE_NAME = "dbnoteapp7"
+        private const val DATABASE_NAME = "dbnewsapp"
 
         private const val DATABASE_VERSION = 1
 
-        private const val SQL_CREATE_TABLE_NOTE = "CREATE TABLE $TABLE_NAME" +
+        private const val SQL_CREATE_TABLE_NEWS = "CREATE TABLE $TABLE_NAME" +
                 " (${DatabaseContract.NewsColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " ${DatabaseContract.NewsColumns.NAME} TEXT NOT NULL," +
                 " ${DatabaseContract.NewsColumns.AUTHOR} TEXT NOT NULL," +
@@ -28,7 +28,7 @@ internal class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(SQL_CREATE_TABLE_NOTE)
+        db.execSQL(SQL_CREATE_TABLE_NEWS)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
