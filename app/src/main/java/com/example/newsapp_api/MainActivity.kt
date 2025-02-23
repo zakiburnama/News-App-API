@@ -4,7 +4,6 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,11 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.loopj.android.http.AsyncHttpClient
-import com.loopj.android.http.AsyncHttpResponseHandler
-import cz.msebera.android.httpclient.Header
-import org.json.JSONArray
-import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Breaking News"
 
-        recyclerView = findViewById(R.id.listNews)
+        recyclerView = findViewById(R.id.recycler_news)
 
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container)
 
