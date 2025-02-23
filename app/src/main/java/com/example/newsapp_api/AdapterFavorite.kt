@@ -9,24 +9,24 @@ import com.squareup.picasso.Picasso
 
 
 class AdapterFavorite(private val onItemClickCallback: OnItemClickCallback) :
-    RecyclerView.Adapter<AdapterFavorite.NoteViewHolder>() {
+    RecyclerView.Adapter<AdapterFavorite.FavoriteViewHolder>() {
     var listNews = ArrayList<Items>()
-        set(listNotes) {
-            if (listNotes.size > 0) {
+        set(listBerita) {
+            if (listBerita.size > 0) {
                 this.listNews.clear()
             }
-            this.listNews.addAll(listNotes)
+            this.listNews.addAll(listBerita)
             notifyDataSetChanged()
         }
 
-    fun addItem(note: Items) {
-        this.listNews.add(note)
+    fun addItem(news: Items) {
+        this.listNews.add(news)
         notifyItemInserted(this.listNews.size - 1)
     }
 
-    fun updateItem(position: Int, note: Items) {
-        this.listNews[position] = note
-        notifyItemChanged(position, note)
+    fun updateItem(position: Int, news: Items) {
+        this.listNews[position] = news
+        notifyItemChanged(position, news)
     }
 
     fun removeItem(position: Int) {
@@ -35,18 +35,18 @@ class AdapterFavorite(private val onItemClickCallback: OnItemClickCallback) :
         notifyItemRangeChanged(position, this.listNews.size)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_news, parent, false)
-        return NoteViewHolder(view)
+        return FavoriteViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
         holder.bind(listNews[position])
     }
 
     override fun getItemCount(): Int = this.listNews.size
 
-    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class FavoriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemNewsBinding.bind(itemView)
         fun bind(news: Items) {
             Picasso.get().load(news.urlToImg).into(binding.imgNews)
@@ -59,6 +59,6 @@ class AdapterFavorite(private val onItemClickCallback: OnItemClickCallback) :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(selectedNote: Items?, position: Int?)
+        fun onItemClicked(selectedNews: Items?, position: Int?)
     }
 }
